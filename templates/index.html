@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Todo App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css')}}">
+</head>
+<body>
+  <h2>TODO APP</h2>
+  <div class="container">
+    <div class="lists-wrapper">
+      <h3>LISTS</h3>
+      <form action="/lists/create" method="POST" id="list-form">
+        <label for="todolist">Create List:</label>
+        <input type="text" name="todolist" id="todolist-input" placeholder="A new List">
+        <input type="submit" value="Create List">
+      </form>
+      <ul id="lists">
+        {% for list in lists %}
+        <li>
+          <input class="list-check-completed" data-id="{{ list.id }}" type="checkbox">
+          <a href="/lists/{{ list.id }}">{{list.name}}</a>
+          <button class="delete-list" data-id="{{ list.id }}">&cross;</button>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+
+    <div class="todos-wrapper">
+      <h3>TODO</h3>
+      <form id="todo-form" action="/todos/create" method="POST">
+        <input id="list_id" type="hidden" value="{{ active_list.id }}">
+        <label for="description">Create Task:</label>
+        <input type="text" id="description" name="description" />
+        <input type="submit" value="Create Task">
+      </form>
+      <div id="error" class="hidden">Something went wrong</div>
+      <h4>{{ active_list.name }}</h4>
+      <ul id="todos">
+        {% for todo in todos %}
+        <li>
+          <input class="todo-check-completed" data-id="{{ todo.id }}" type="checkbox" {% if todo.completed %} checked {% endif %}> 
+          {{ todo.description }}
+        <button class="delete-todo" data-id="{{ todo.id }}">&cross;</button>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/script.js')}}"></script>
+</body>
+</html>
